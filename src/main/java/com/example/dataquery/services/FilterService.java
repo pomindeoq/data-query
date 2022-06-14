@@ -12,7 +12,7 @@ import java.util.Map;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import static com.example.dataquery.models.QueryOperation.*;
+import static com.example.dataquery.models.QueryOperation.valueOf;
 
 @Service
 public class FilterService implements IFilterService {
@@ -34,26 +34,33 @@ public class FilterService implements IFilterService {
 
     private List<PostDTO> filterWithParams(List<SearchCriteria> params) {
         List<Predicate<PostDTO>> predicates = new ArrayList<>();
-        for(SearchCriteria param: params ) {
+        for (SearchCriteria param : params) {
             predicates.add(createPredicate(param));
         }
 
         return StreamEx.of(posts.values())
-                .filter(predicates.stream().reduce(x->true, Predicate::and))
+                .filter(predicates.stream().reduce(x -> true, Predicate::and))
                 .collect(Collectors.toList());
     }
 
     private Predicate<PostDTO> createPredicate(SearchCriteria criteria) {
-
         return switch (valueOf(criteria.getOperation())) {
             case EQUAL -> post -> post.filterBy(criteria.getKey()).equals(criteria.getValue());
             case AND -> null;
             case OR -> null;
             case NOT -> null;
-            case GREATER_THAN -> null;
-            case LESS_THAN -> null;
+            case GREATER_THAN, LESS_THAN -> post -> {
+                try {
+                    return Integer.parseInt(String.valueOf(post.filterBy(criteria.getKey()))) < Integer.parseInt(criteria.getValue());
+
+                } catch (NumberFormatException ex) {
+                    System.out.println(ex);
+                    throw ex;
+                }
+            };
             default -> null;
         };
     }
+
 
 }

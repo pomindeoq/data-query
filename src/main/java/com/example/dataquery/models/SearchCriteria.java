@@ -10,5 +10,5 @@ import lombok.experimental.SuperBuilder;
 public class SearchCriteria {
     private String operation;
     private String key;
-    private Object value;
+    private String value;
 }
