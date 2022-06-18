@@ -23,10 +23,10 @@ public class PostsController {
     public ResponseEntity<List<PostDTO>> search(@RequestParam(name = "query", required = false) String query) {
         List<SearchCriteria> params = new ArrayList<>();
         if (query != null) {
-            Pattern pattern = Pattern.compile("(EQUAL|GREATER_THAN|LESS_THAN)\\((\\w+?),\"?(\\w+?)\"?\\),");
+            Pattern pattern = Pattern.compile("(NOT|AND|OR)?\\(?(EQUAL|GREATER_THAN|LESS_THAN)\\((.+?),\"?(.+?)\"?\\)\\)?,");
             Matcher matcher = pattern.matcher(query + ",");
             while (matcher.find()) {
-                params.add(new SearchCriteria(matcher.group(1), matcher.group(2), matcher.group(3)));
+                params.add(new SearchCriteria(matcher.group(1), matcher.group(2), matcher.group(3), matcher.group(4)));
             }
         }
         return ResponseEntity.ok(service.searchPosts(params));
