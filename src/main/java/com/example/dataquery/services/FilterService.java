@@ -1,12 +1,12 @@
 package com.example.dataquery.services;
 
+import com.example.dataquery.exceptions.constants.ErrorCodes;
 import com.example.dataquery.models.PostDTO;
 import com.example.dataquery.models.SearchCriteria;
 import one.util.streamex.StreamEx;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.stereotype.Service;
 
-import javax.swing.text.html.Option;
 import java.util.*;
 import java.util.function.Predicate;
 
@@ -23,15 +23,15 @@ public class FilterService implements IFilterService {
             .build();
 
     PostDTO post2 = PostDTO.builder()
-            .id("second")
-            .title("second-post")
+            .id("second-post")
+            .title("My Second Post")
             .content("Java Tutorial")
             .views(20)
             .timestamp(1555832655)
             .build();
 
     PostDTO post3 = PostDTO.builder()
-            .id("third")
+            .id("third-post")
             .title("My Third Post")
             .content("Scala Tutorial")
             .views(50)
@@ -65,8 +65,14 @@ public class FilterService implements IFilterService {
             predicates.add(createPredicate(param));
         }
 
+        Optional<String> orPrefix = Optional.ofNullable(params.get(0).getPrefix())
+                .filter(OR.toString()::equals);
+
+        Predicate<PostDTO> combineUsingOR = StreamEx.of(predicates).reduce(x -> false, Predicate::or);
+        Predicate<PostDTO> combineUsingAND = StreamEx.of(predicates).reduce(x -> true, Predicate::and);
+
         return StreamEx.of(posts.values())
-                .filter(predicates.stream().reduce(x -> true, Predicate::and))
+                .filter(orPrefix.isPresent() ? combineUsingOR : combineUsingAND)
                 .toList();
     }
 
@@ -74,13 +80,13 @@ public class FilterService implements IFilterService {
         return switch (valueOf(criteria.getOperation())) {
             case EQUAL -> post -> doEqualsOperation(criteria, post);
             case GREATER_THAN, LESS_THAN -> post -> doGreaterOrLessOperation(criteria, post);
-            default -> throw new IllegalStateException("Unexpected value: " + valueOf(criteria.getOperation()));
+            default -> throw ErrorCodes.NOT_VALID_OPERATOR.getException();
         };
     }
 
     private boolean doGreaterOrLessOperation(SearchCriteria criteria, PostDTO post) {
         if(!NumberUtils.isParsable(criteria.getValue())) {
-            throw new RuntimeException("Operator for this key is not valid");
+            throw ErrorCodes.NOT_VALID_OPERATOR_FOR_KEY.getException();
         }
         try {
             return switch (valueOf(criteria.getOperation())) {
@@ -88,7 +94,7 @@ public class FilterService implements IFilterService {
                         Integer.parseInt(criteria.getValue()));
                 case LESS_THAN -> lessThan(Integer.parseInt(String.valueOf(post.filterBy(criteria.getKey()))),
                         Integer.parseInt(criteria.getValue()));
-                default -> throw new IllegalStateException("Unexpected value: " + valueOf(criteria.getOperation()));
+                default -> throw ErrorCodes.NOT_VALID_OPERATOR.getException();
             };
         } catch (NumberFormatException ex) {
             System.out.println(ex);
