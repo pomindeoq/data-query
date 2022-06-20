@@ -74,6 +74,16 @@ class PostsControllerTest extends DataQueryApplicationTests {
         assertEquals(expectedPosts, actualPosts);
     }
 
+    @Test
+    void searchPostsLessThanViews50_success() {
+        String query = "LESS_THAN(views,50)";
+        List<PostDTO> expectedPosts = List.of(setup_post1(), setup_post2());
+        List<PostDTO> actualPosts = postsController.search(query).getBody();
+
+        assertEquals(2, actualPosts.size());
+        assertEquals(expectedPosts, actualPosts);
+    }
+
     private PostDTO setup_post1() {
         return PostDTO.builder()
                 .id("first-post")

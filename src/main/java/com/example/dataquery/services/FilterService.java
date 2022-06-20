@@ -69,11 +69,11 @@ public class FilterService implements IFilterService {
         Optional<String> orPrefix = Optional.ofNullable(params.get(0).getPrefix())
                 .filter(OR.toString()::equals);
 
-        Predicate<PostDTO> combineUsingOR = StreamEx.of(predicates).reduce(x -> false, Predicate::or);
-        Predicate<PostDTO> combineUsingAND = StreamEx.of(predicates).reduce(x -> true, Predicate::and);
+        Predicate<PostDTO> predicatesOR = StreamEx.of(predicates).reduce(x -> false, Predicate::or);
+        Predicate<PostDTO> predicatesAND = StreamEx.of(predicates).reduce(x -> true, Predicate::and);
 
         return StreamEx.of(posts.values())
-                .filter(orPrefix.isPresent() ? combineUsingOR : combineUsingAND)
+                .filter(orPrefix.isPresent() ? predicatesOR : predicatesAND)
                 .toList();
     }
 
@@ -90,7 +90,7 @@ public class FilterService implements IFilterService {
             throw ErrorCodes.NOT_VALID_OPERATOR_FOR_KEY.getException();
         }
         try {
-            return Operator.parseOperator(valueOf(criteria.getOperation()).toString()).apply(
+            return Operator.parseOperator(valueOf(criteria.getOperation()).getValue()).apply(
                     Integer.parseInt(String.valueOf(post.filterBy(criteria.getKey()))),
                     Integer.parseInt(criteria.getValue()));
         } catch (NumberFormatException ex) {
