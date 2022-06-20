@@ -1,6 +1,6 @@
 FROM gradle:7.2.0-jdk17 as builder
 WORKDIR /var/lib/build
-ADD ./ ./
+ADD .. ./
 
 
 RUN gradle build
