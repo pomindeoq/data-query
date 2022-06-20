@@ -1,6 +1,7 @@
 package com.example.dataquery.services;
 
 import com.example.dataquery.exceptions.constants.ErrorCodes;
+import com.example.dataquery.models.Operator;
 import com.example.dataquery.models.PostDTO;
 import com.example.dataquery.models.SearchCriteria;
 import one.util.streamex.StreamEx;
@@ -10,7 +11,7 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 import java.util.function.Predicate;
 
-import static com.example.dataquery.models.QueryOperation.*;
+import static com.example.dataquery.models.Operator.*;
 
 @Service
 public class FilterService implements IFilterService {
@@ -89,13 +90,9 @@ public class FilterService implements IFilterService {
             throw ErrorCodes.NOT_VALID_OPERATOR_FOR_KEY.getException();
         }
         try {
-            return switch (valueOf(criteria.getOperation())) {
-                case GREATER_THAN -> greaterThan(Integer.parseInt(String.valueOf(post.filterBy(criteria.getKey()))),
-                        Integer.parseInt(criteria.getValue()));
-                case LESS_THAN -> lessThan(Integer.parseInt(String.valueOf(post.filterBy(criteria.getKey()))),
-                        Integer.parseInt(criteria.getValue()));
-                default -> throw ErrorCodes.NOT_VALID_OPERATOR.getException();
-            };
+            return Operator.parseOperator(valueOf(criteria.getOperation()).toString()).apply(
+                    Integer.parseInt(String.valueOf(post.filterBy(criteria.getKey()))),
+                    Integer.parseInt(criteria.getValue()));
         } catch (NumberFormatException ex) {
             System.out.println(ex);
             throw ex;
@@ -109,14 +106,5 @@ public class FilterService implements IFilterService {
         Optional<String> notPrefix = Optional.ofNullable(criteria.getPrefix())
                 .filter(NOT.toString()::equals);
         return notPrefix.isPresent() != equals;
-    }
-
-
-    private boolean lessThan(Integer x, Integer y) {
-        return x < y;
-    }
-
-    private boolean greaterThan(Integer x, Integer y) {
-        return x > y;
     }
 }

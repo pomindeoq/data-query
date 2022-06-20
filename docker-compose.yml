@@ -1,0 +1,11 @@
+  backend:
+    build:
+      context: .
+      dockerfile: ./local-env/Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      WAIT_FOR_IT_TIMEOUT: 20
+      SPRING_PROFILES_ACTIVE: "local-dc"
+      MYSQL_HOST: mysql
+      MYSQL_PORT: 3306
