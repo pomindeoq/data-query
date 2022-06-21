@@ -1,5 +1,3 @@
-server:
-  port: 8000
 logging:
   file:
     name: "logback-spring.xml"

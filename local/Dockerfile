@@ -2,11 +2,9 @@ FROM gradle:7.2.0-jdk17 as builder
 WORKDIR /var/lib/build
 ADD .. ./
 
-
 RUN gradle build
 
 CMD pwd && ls -ltr
-
 
 FROM openjdk:17-alpine
 
