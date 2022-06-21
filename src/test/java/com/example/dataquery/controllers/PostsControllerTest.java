@@ -84,6 +84,25 @@ class PostsControllerTest extends DataQueryApplicationTests {
         assertEquals(expectedPosts, actualPosts);
     }
 
+    @Test
+    void searchPostsGreaterThanLastTimestamp_success() {
+        String query = "GREATER_THAN(timestamp,1555832955)";
+        List<PostDTO> expectedPosts = List.of();
+        List<PostDTO> actualPosts = postsController.search(query).getBody();
+
+        assertEquals(0, actualPosts.size());
+        assertEquals(expectedPosts, actualPosts);
+    }
+
+    @Test
+    void searchPostsAndViewsId_success() {
+        String query = "GREATER_THAN(timestamp,1555832955)";
+        List<PostDTO> expectedPosts = List.of();
+        List<PostDTO> actualPosts = postsController.search(query).getBody();
+
+        assertEquals(0, actualPosts.size());
+        assertEquals(expectedPosts, actualPosts);
+    }
     private PostDTO setup_post1() {
         return PostDTO.builder()
                 .id("first-post")

@@ -1,10 +1,8 @@
-version: "1"
+version: "3"
 services:
   backend:
     build:
       context: .
-      dockerfile: ./local-env/Dockerfile
+      dockerfile: ./local/Dockerfile
     ports:
       - "8000:8000"
-    environment:
-      SPRING_PROFILES_ACTIVE: "local-dc"

@@ -17,8 +17,4 @@ EXPOSE 8080
 
 COPY --from=builder /var/lib/build/build/libs/data-query-0.0.1.jar /data-query.jar
 
-COPY local/docker-entrypoint.sh .
-RUN chmod +x ./docker-entrypoint.sh
-
-ENTRYPOINT ["./docker-entrypoint.sh"]
 ENTRYPOINT ["java", "-jar","/data-query.jar"]

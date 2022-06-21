@@ -39,12 +39,11 @@ public class FilterService implements IFilterService {
             .timestamp(1555832955)
             .build();
 
-
-    Map<String, PostDTO> posts = Map.of(
-            post1.getId(), post1,
-            post2.getId(), post2,
-            post3.getId(), post3
-    );
+    Map<String, PostDTO> posts  = new HashMap<>() {{
+        put(post1.getId(), post1);
+        put(post2.getId(), post2);
+        put(post3.getId(), post3);
+    }};
 
     @Override
     public List<PostDTO> searchPosts(final List<SearchCriteria> params) {
