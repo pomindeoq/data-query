@@ -12,25 +12,25 @@ public enum Operator {
     EQUAL("==") {
         @Override
         public boolean apply(int left, int right) {
-            throw new NotImplementedException("method not overridden");
+            throw new NotImplementedException("method not supported");
         }
     },
     AND("&&") {
         @Override
         public boolean apply(int left, int right) {
-            throw new NotImplementedException("method not overridden");
+            throw new NotImplementedException("method not supported");
         }
     },
     OR("||") {
         @Override
         public boolean apply(int left, int right) {
-            throw new NotImplementedException("method not overridden");
+            throw new NotImplementedException("method not supported");
         }
     },
     NOT("!") {
         @Override
         public boolean apply(int left, int right) {
-            throw new NotImplementedException("method not overridden");
+            throw new NotImplementedException("method not supported");
         }
     },
     GREATER_THAN(">") {

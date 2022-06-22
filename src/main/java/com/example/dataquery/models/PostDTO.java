@@ -1,5 +1,6 @@
 package com.example.dataquery.models;
 
+import com.example.dataquery.exceptions.constants.ErrorCodes;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
@@ -21,7 +22,7 @@ public class PostDTO {
             case "content" -> this.content;
             case "views" -> this.views;
             case "timestamp" -> this.timestamp;
-            default -> null;
+            default -> throw ErrorCodes.NOT_VALID_PROPERTY.getException();
         };
     }
 }

@@ -1,5 +1,7 @@
 package com.example.dataquery.controllers;
 
+import com.example.dataquery.exceptions.GenericException;
+import com.example.dataquery.exceptions.constants.ErrorCodes;
 import com.example.dataquery.models.EmptyJsonResponse;
 import com.example.dataquery.models.PostDTO;
 import com.example.dataquery.models.SearchCriteria;
@@ -23,10 +25,13 @@ public class PostsController {
     public ResponseEntity<List<PostDTO>> search(@RequestParam(name = "query", required = false) String query) {
         List<SearchCriteria> params = new ArrayList<>();
         if (query != null) {
-            Pattern pattern = Pattern.compile("(NOT|AND|OR)?\\(?(EQUAL|GREATER_THAN|LESS_THAN)\\((.+?),\"?(.+?)\"?\\)\\)?,");
+            Pattern pattern = Pattern.compile("\\b(NOT|AND|OR)?\\(?(EQUAL|GREATER_THAN|LESS_THAN)\\((.+?),\"?(.+?)\"?\\)\\)?,");
             Matcher matcher = pattern.matcher(query + ",");
             while (matcher.find()) {
                 params.add(new SearchCriteria(matcher.group(1), matcher.group(2), matcher.group(3), matcher.group(4)));
+            }
+            if(params.isEmpty()) {
+                throw ErrorCodes.NOT_VALID_QUERY.getException();
             }
         }
         return ResponseEntity.ok(service.searchPosts(params));

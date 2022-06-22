@@ -1,11 +1,13 @@
 package com.example.dataquery.services;
 
+import ch.qos.logback.classic.Logger;
 import com.example.dataquery.exceptions.constants.ErrorCodes;
 import com.example.dataquery.models.Operator;
 import com.example.dataquery.models.PostDTO;
 import com.example.dataquery.models.SearchCriteria;
 import one.util.streamex.StreamEx;
 import org.apache.commons.lang3.math.NumberUtils;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -77,10 +79,10 @@ public class FilterService implements IFilterService {
     }
 
     private Predicate<PostDTO> createPredicate(SearchCriteria criteria) {
-        return switch (valueOf(criteria.getOperation())) {
+        return switch (valueOf(criteria.getOperator())) {
             case EQUAL -> post -> doEqualsOperation(criteria, post);
             case GREATER_THAN, LESS_THAN -> post -> doGreaterOrLessOperation(criteria, post);
-            default -> throw ErrorCodes.NOT_VALID_OPERATOR.getException();
+            default -> throw ErrorCodes.NOT_SUPPORTED_OPERATOR.getException();
         };
     }
 
@@ -89,7 +91,7 @@ public class FilterService implements IFilterService {
             throw ErrorCodes.NOT_VALID_OPERATOR_FOR_KEY.getException();
         }
         try {
-            return Operator.parseOperator(valueOf(criteria.getOperation()).getValue()).apply(
+            return Operator.parseOperator(valueOf(criteria.getOperator()).getValue()).apply(
                     Integer.parseInt(String.valueOf(post.filterBy(criteria.getKey()))),
                     Integer.parseInt(criteria.getValue()));
         } catch (NumberFormatException ex) {

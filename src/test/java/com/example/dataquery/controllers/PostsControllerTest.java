@@ -1,12 +1,14 @@
 package com.example.dataquery.controllers;
 
 import com.example.dataquery.DataQueryApplicationTests;
+import com.example.dataquery.exceptions.GenericException;
+import com.example.dataquery.exceptions.constants.ErrorCodes;
 import com.example.dataquery.models.PostDTO;
 import com.example.dataquery.services.FilterService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import java.util.List;;
+import java.util.List;
+import static org.junit.jupiter.api.Assertions.*;
 
 class PostsControllerTest extends DataQueryApplicationTests {
 
@@ -126,6 +128,38 @@ class PostsControllerTest extends DataQueryApplicationTests {
         assertEquals(expectedPosts, actualPosts);
     }
 
+    @Test
+    void searchPostsLessThanId_failure() {
+        String query = "LESS_THAN(id,\"first-post\")";
+        GenericException actualException = assertThrows(GenericException.class, () -> {
+            postsController.search(query);
+        });
+        GenericException expectedException = ErrorCodes.NOT_VALID_OPERATOR_FOR_KEY.getException();
+        assertEquals(expectedException.getMessage(), actualException.getMessage());
+        assertEquals(expectedException.getCode(), actualException.getCode());
+    }
+
+    @Test
+    void searchPostsInvalidPropertyView_failure() {
+        String query = "EQUAL(view,50)";
+        GenericException actualException = assertThrows(GenericException.class, () -> {
+            postsController.search(query);
+        });
+        GenericException expectedException = ErrorCodes.NOT_VALID_PROPERTY.getException();
+        assertEquals(expectedException.getMessage(), actualException.getMessage());
+        assertEquals(expectedException.getCode(), actualException.getCode());
+    }
+
+    @Test
+    void searchPostsInvalidOperator_failure() {
+        String query = "GREATER_OR_EQUAL(views,50)";
+        GenericException actualException = assertThrows(GenericException.class, () -> {
+            postsController.search(query);
+        });
+        GenericException expectedException = ErrorCodes.NOT_VALID_QUERY.getException();
+        assertEquals(expectedException.getMessage(), actualException.getMessage());
+        assertEquals(expectedException.getCode(), actualException.getCode());
+    }
 
     private PostDTO setup_post1() {
         return PostDTO.builder()

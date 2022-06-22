@@ -10,6 +10,6 @@ public class GenericException extends RuntimeException {
     }
 
     public String getCode() {
-        return code;
+        return this.code;
     }
 }
