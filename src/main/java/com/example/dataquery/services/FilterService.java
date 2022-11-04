@@ -5,13 +5,17 @@ import com.example.dataquery.exceptions.constants.ErrorCodes;
 import com.example.dataquery.models.Operator;
 import com.example.dataquery.models.PostDTO;
 import com.example.dataquery.models.SearchCriteria;
+import lombok.Builder;
 import one.util.streamex.StreamEx;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 import java.util.function.Predicate;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static com.example.dataquery.models.Operator.*;
 
@@ -41,11 +45,26 @@ public class FilterService implements IFilterService {
             .timestamp(1555832955)
             .build();
 
-    Map<String, PostDTO> posts  = new HashMap<>() {{
+    Map<String, PostDTO> posts = new HashMap<>() {{
         put(post1.getId(), post1);
         put(post2.getId(), post2);
         put(post3.getId(), post3);
     }};
+
+    public List<SearchCriteria> buildParams(String query) {
+        List<SearchCriteria> params = new ArrayList<>();
+        if (query != null) {
+            Pattern pattern = Pattern.compile("\\b(NOT|AND|OR)?\\(?(EQUAL|GREATER_THAN|LESS_THAN)\\((.+?),\"?(.+?)\"?\\)\\)?,");
+            Matcher matcher = pattern.matcher(query + ",");
+            while (matcher.find()) {
+                params.add(new SearchCriteria(matcher.group(1), matcher.group(2), matcher.group(3), matcher.group(4)));
+            }
+            if (params.isEmpty()) {
+                throw ErrorCodes.NOT_VALID_QUERY.getException();
+            }
+        }
+        return params;
+    }
 
     @Override
     public List<PostDTO> searchPosts(final List<SearchCriteria> params) {
@@ -87,7 +106,7 @@ public class FilterService implements IFilterService {
     }
 
     private boolean doGreaterOrLessOperation(SearchCriteria criteria, PostDTO post) {
-        if(!NumberUtils.isParsable(criteria.getValue())) {
+        if (!NumberUtils.isParsable(criteria.getValue())) {
             throw ErrorCodes.NOT_VALID_OPERATOR_FOR_KEY.getException();
         }
         try {
