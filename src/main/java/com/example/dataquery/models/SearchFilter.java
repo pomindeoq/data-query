@@ -7,7 +7,7 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder(toBuilder = true)
-public class SearchCriteria {
+public class SearchFilter {
     private String prefix;
     private String operator;
     private String key;
