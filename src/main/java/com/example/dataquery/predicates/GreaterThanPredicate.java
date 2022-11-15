@@ -5,10 +5,12 @@ import com.example.dataquery.exceptions.constants.ErrorCodes;
 import com.example.dataquery.models.PostDTO;
 import com.example.dataquery.models.SearchFilter;
 import org.apache.commons.lang3.math.NumberUtils;
+import org.springframework.stereotype.Component;
 
 import java.util.function.Predicate;
 
-public class GreaterThanPredicate implements OperatorPredicate<PostDTO, SearchFilter> {
+@Component
+public class GreaterThanPredicate implements OperatorPredicate {
     @Override
     public Predicate<PostDTO> build(SearchFilter filter) {
         if (!NumberUtils.isParsable(filter.getValue())) {
@@ -20,5 +22,10 @@ public class GreaterThanPredicate implements OperatorPredicate<PostDTO, SearchFi
             System.out.println(ex);
             throw ex;
         }
+    }
+
+    @Override
+    public boolean canHandle(String operator) {
+        return operator.equals("GREATER_THAN");
     }
 }

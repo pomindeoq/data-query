@@ -10,7 +10,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class ParserService {
-    RegexParser regexParser;
+    private final RegexParser regexParser;
 
     public List<SearchFilter> parseParameters(String query) {
         return regexParser.parse(query);

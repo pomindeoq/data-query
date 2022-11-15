@@ -12,8 +12,8 @@ import java.util.Map;
 @Service
 @RequiredArgsConstructor
 public class PostService {
-    FilterService filterService;
-    ParserService parserService;
+    private final FilterService filterService;
+    private final ParserService parserService;
     Map<String, PostDTO> posts = PostDTO.getPosts();
 
     public List<PostDTO> searchPosts(String query) {
