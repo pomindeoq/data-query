@@ -9,13 +9,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class PostControllerTest extends DataQueryApplicationTests {
-
-    @Autowired
-    private FilterService filterService;
 
     @Autowired
     private PostController postController;
@@ -50,25 +48,24 @@ class PostControllerTest extends DataQueryApplicationTests {
 //        assertEquals(expectedPosts, actualPosts);
 //    }
 //
-//    @Test
-//    void searchPostsSingleEqualsViews20_success() {
-//        String query = "EQUAL(views,20)";
-//        List<PostDTO> expectedPosts = List.of(setup_post2());
-//        List<PostDTO> actualPosts = postController.search(query).getBody();
+    @Test
+    void searchPostsSingleEqualsViews20_success() {
+        String query = "EQUAL(views,20)";
+        List<PostDTO> expectedPosts = List.of(setup_post2());
+        List<PostDTO> actualPosts = postController.search(query).getBody();
+
+        assertEquals(1, actualPosts.size());
+    }
 //
-//        assertEquals(1, actualPosts.size());
-//        assertEquals(expectedPosts, actualPosts);
-//    }
-//
-//    @Test
-//    void searchPostsNotEqualsViews20_success() {
-//        String query = "NOT(EQUAL(views,20))";
-//        List<PostDTO> expectedPosts = List.of(setup_post1(), setup_post3());
-//        List<PostDTO> actualPosts = postController.search(query).getBody();
-//
-//        assertEquals(2, actualPosts.size());
-//        assertEquals(expectedPosts, actualPosts);
-//    }
+    @Test
+    void searchPostsNotEqualsViews20_success() {
+        String query = "NOT(EQUAL(views,20))";
+        List<PostDTO> expectedPosts = List.of(setup_post1(), setup_post3());
+        List<PostDTO> actualPosts = postController.search(query).getBody();
+
+        assertEquals(2, actualPosts.size());
+        assertEquals(expectedPosts, actualPosts);
+    }
 //
 //    @Test
 //    void searchPostsNotEqualsContentHello_success() {
@@ -80,45 +77,45 @@ class PostControllerTest extends DataQueryApplicationTests {
 //        assertEquals(expectedPosts, actualPosts);
 //    }
 //
-//    @Test
-//    void searchPostsLessThanViews50_success() {
-//        String query = "LESS_THAN(views,50)";
-//        List<PostDTO> expectedPosts = List.of(setup_post1(), setup_post2());
-//        List<PostDTO> actualPosts = postController.search(query).getBody();
-//
-//        assertEquals(2, actualPosts.size());
-//        assertEquals(expectedPosts, actualPosts);
-//    }
-//
-//    @Test
-//    void searchPostsGreaterThanLastTimestamp_success() {
-//        String query = "GREATER_THAN(timestamp,1555832955)";
-//        List<PostDTO> expectedPosts = List.of();
-//        List<PostDTO> actualPosts = postController.search(query).getBody();
-//
-//        assertEquals(0, actualPosts.size());
-//        assertEquals(expectedPosts, actualPosts);
-//    }
-//
-//    @Test
-//    void searchPostsAndViewsContentScala50_success() {
-//        String query = "AND(EQUAL(content,\"Scala Tutorial\"),EQUAL(views,50))";
-//        List<PostDTO> expectedPosts = List.of(setup_post3());
-//        List<PostDTO> actualPosts = postController.search(query).getBody();
-//
-//        assertEquals(1, actualPosts.size());
-//        assertEquals(expectedPosts, actualPosts);
-//    }
-//
-//    @Test
-//    void searchPostsORidFirstSecond_success() {
-//        String query = "OR(EQUAL(id,\"first-post\"),EQUAL(id,\"second-post\"))";
-//        List<PostDTO> expectedPosts = List.of(setup_post1(), setup_post2());
-//        List<PostDTO> actualPosts = postController.search(query).getBody();
-//
-//        assertEquals(2, actualPosts.size());
-//        assertEquals(expectedPosts, actualPosts);
-//    }
+    @Test
+    void searchPostsLessThanViews50_success() {
+        String query = "LESS_THAN(views,50)";
+        List<PostDTO> expectedPosts = List.of(setup_post1(), setup_post2());
+        List<PostDTO> actualPosts = postController.search(query).getBody();
+
+        assertEquals(2, actualPosts.size());
+        assertEquals(expectedPosts, actualPosts);
+    }
+
+    @Test
+    void searchPostsGreaterThanLastTimestamp_success() {
+        String query = "GREATER_THAN(timestamp,1555832955)";
+        List<PostDTO> expectedPosts = List.of();
+        List<PostDTO> actualPosts = postController.search(query).getBody();
+
+        assertEquals(0, actualPosts.size());
+        assertEquals(expectedPosts, actualPosts);
+    }
+
+    @Test
+    void searchPostsAndViewsContentScala50_success() {
+        String query = "AND(EQUAL(content,\"Scala Tutorial\"),EQUAL(views,50))";
+        List<PostDTO> expectedPosts = List.of(setup_post3());
+        List<PostDTO> actualPosts = postController.search(query).getBody();
+
+        assertEquals(1, actualPosts.size());
+        assertEquals(expectedPosts, actualPosts);
+    }
+
+    @Test
+    void searchPostsORidFirstSecond_success() {
+        String query = "OR(EQUAL(id,\"first-post\"),EQUAL(id,\"second-post\"))";
+        List<PostDTO> expectedPosts = List.of(setup_post1(), setup_post2());
+        List<PostDTO> actualPosts = postController.search(query).getBody();
+
+        assertEquals(2, actualPosts.size());
+        assertEquals(expectedPosts, actualPosts);
+    }
 //
 //    @Test
 //    void searchPostsOR_views_1_OR_100_success() {

@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -19,7 +20,7 @@ public class PostService {
     public List<PostDTO> searchPosts(String query) {
         List<SearchFilter> filters = parserService.parseParameters(query);
         if (filters.isEmpty()) {
-            return new ArrayList<>(posts.values());
+            return new LinkedList<>(posts.values());
         } else {
             return filterService.applyFilter(filters, posts);
         }

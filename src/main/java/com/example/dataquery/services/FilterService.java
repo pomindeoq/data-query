@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.*;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import static com.example.dataquery.models.Operators.NOT;
 import static com.example.dataquery.models.Operators.OR;
@@ -29,6 +30,7 @@ public class FilterService {
 
         return posts.values().stream()
                 .filter(notPrefix.isPresent() ? predicate.negate() : predicate)
+                .sorted(Comparator.comparingInt(PostDTO::getTimestamp))
                 .toList();
     }
 

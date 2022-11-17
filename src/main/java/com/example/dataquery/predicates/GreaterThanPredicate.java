@@ -17,7 +17,7 @@ public class GreaterThanPredicate implements OperatorPredicate {
             throw ErrorCodes.NOT_VALID_OPERATOR_FOR_KEY.getException();
         }
         try {
-            return p -> Integer.parseInt((String) p.filterBy(filter.getKey())) > Integer.parseInt(filter.getValue());
+            return p -> Integer.parseInt(String.valueOf(p.filterBy(filter.getKey()))) > Integer.parseInt(filter.getValue());
         } catch (NumberFormatException ex) {
             System.out.println(ex);
             throw ex;
