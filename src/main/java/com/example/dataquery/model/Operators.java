@@ -1,4 +1,4 @@
-package com.example.dataquery.models;
+package com.example.dataquery.model;
 
 public enum Operators {
     EQUAL,

@@ -1,6 +1,6 @@
-package com.example.dataquery.exceptions.constants;
+package com.example.dataquery.exception.constants;
 
-import com.example.dataquery.exceptions.GenericException;
+import com.example.dataquery.exception.GenericException;
 
 public enum ErrorCodes {
 

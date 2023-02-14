@@ -1,7 +1,7 @@
-package com.example.dataquery.services;
+package com.example.dataquery.service;
 
-import com.example.dataquery.models.SearchFilter;
-import com.example.dataquery.parsers.RegexParser;
+import com.example.dataquery.model.SearchFilter;
+import com.example.dataquery.parser.RegexParser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

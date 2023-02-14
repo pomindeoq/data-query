@@ -1,4 +1,4 @@
-package com.example.dataquery.exceptions;
+package com.example.dataquery.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

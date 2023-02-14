@@ -1,4 +1,4 @@
-package com.example.dataquery.exceptions;
+package com.example.dataquery.exception;
 
 public class GenericException extends RuntimeException {
     final String code;

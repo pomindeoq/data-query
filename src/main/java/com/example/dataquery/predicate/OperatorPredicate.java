@@ -1,7 +1,7 @@
-package com.example.dataquery.predicates;
+package com.example.dataquery.predicate;
 
-import com.example.dataquery.models.PostDTO;
-import com.example.dataquery.models.SearchFilter;
+import com.example.dataquery.model.PostDTO;
+import com.example.dataquery.model.SearchFilter;
 
 import java.util.function.Predicate;
 

@@ -1,11 +1,10 @@
-package com.example.dataquery.services;
+package com.example.dataquery.service;
 
-import com.example.dataquery.models.PostDTO;
-import com.example.dataquery.models.SearchFilter;
+import com.example.dataquery.model.PostDTO;
+import com.example.dataquery.model.SearchFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -27,6 +26,6 @@ public class PostService {
     }
 
     public void post(final PostDTO post) {
-        posts.put(post.getId(), post);
+        posts.put(post.id(), post);
     }
 }
