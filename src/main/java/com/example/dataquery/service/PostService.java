@@ -14,18 +14,15 @@ import java.util.Map;
 public class PostService {
     private final FilterService filterService;
     private final ParserService parserService;
-    Map<String, PostDTO> posts = PostDTO.getPosts();
+    private Map<String, PostDTO> posts = PostDTO.getPosts();
 
     public List<PostDTO> searchPosts(String query) {
         List<SearchFilter> filters = parserService.parseParameters(query);
-        if (filters.isEmpty()) {
-            return new LinkedList<>(posts.values());
-        } else {
-            return filterService.applyFilter(filters, posts);
-        }
+        if (filters.isEmpty()) return List.copyOf(posts.values());
+        return filterService.applyFilter(filters, posts);
     }
 
-    public void post(final PostDTO post) {
+    public void post(PostDTO post) {
         posts.put(post.id(), post);
     }
 }
